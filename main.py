@@ -44,6 +44,10 @@ class Client:
 #            self.send("I got: " + message)
         return True
 
+    def startup(self):
+        self.send("PING\n")
+        self.send("NOTICE :welcome to the eirc protocol\n")
+
 server = socket(AF_INET, SOCK_STREAM)
 server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 server.bind(("127.0.0.1", 6667))
@@ -55,6 +59,7 @@ while True:
     for item in read:
         if item is server:
             client = Client(*server.accept())
+            client.startup()
             clients.append(client)
             continue
         if not item.process():
